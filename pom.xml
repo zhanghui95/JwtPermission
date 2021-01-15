@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github</groupId>
+    <groupId>com.yilers</groupId>
     <artifactId>jwt-permission-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
@@ -12,7 +12,7 @@
 
     <name>JwtPermission</name>
     <description>Authority management framework based on JJWT implementation.</description>
-    <url>https://github.com/whvcse/JwtPermission</url>
+    <url>https://github.com/zhanghui95/JwtPermission</url>
 
     <licenses>
         <license>
@@ -33,9 +33,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git@github.com:whvcse/JwtPermission.git</connection>
-        <developerConnection>scm:git@github.com:whvcse/JwtPermission.git</developerConnection>
-        <url>https://github.com/whvcse/JwtPermission</url>
+        <connection>scm:git@github.com:zhanghui95/JwtPermission.git</connection>
+        <developerConnection>scm:git@github.com:zhanghui95/JwtPermission.git</developerConnection>
+        <url>https://github.com/zhanghui95/JwtPermission</url>
     </scm>
 
     <modules>
@@ -58,11 +58,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.github</groupId>
-                <artifactId>jwt-permission</artifactId>
-                <version>${jwtp.version}</version>
-            </dependency>
             <!-- j2ee环境 -->
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -124,51 +119,44 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>6</source>
-                        <target>6</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
     <profiles>
         <profile>
             <id>release</id>
             <build>
                 <plugins>
-                    <!-- Source -->
+                    <!-- 源码构建插件 -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>attach-sources</id>
                                 <goals>
                                     <goal>jar-no-fork</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- Javadoc -->
+                    <!--javadoc插件-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>2.9.1</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>attach-javadocs</id>
+                                <!--<phase>install</phase>-->
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <!--<failOnError>false</failOnError>-->
+                                    <!--<doclint>none</doclint>-->
+                                    <encoding>UTF-8</encoding>
+                                    <charset>UTF-8</charset>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -190,11 +178,11 @@
             </build>
             <distributionManagement>
                 <snapshotRepository>
-                    <id>oss</id>
+                    <id>snapshot</id>
                     <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
                 </snapshotRepository>
                 <repository>
-                    <id>oss</id>
+                    <id>release</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>

@@ -2,8 +2,8 @@
   "groups": [
     {
       "name": "jwtp",
-      "type": "com.github.jwtp.configuration.JwtPermissionProperties",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties"
+      "type": "com.yilers.jwtp.configuration.JwtPermissionProperties",
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties"
     }
   ],
   "properties": [
@@ -11,39 +11,39 @@
       "name": "jwtp.auth-center-url",
       "type": "java.lang.String",
       "description": "统一认证中心地址，多个地址用逗号','分隔",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties"
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties"
     },
     {
       "name": "jwtp.exclude-path",
       "type": "java.lang.String[]",
       "description": "排除拦截路径，多个路径用逗号分隔",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties",
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties",
       "defaultValue": []
     },
     {
       "name": "jwtp.find-permissions-sql",
       "type": "java.lang.String",
       "description": "自定义查询用户权限的sql",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties"
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties"
     },
     {
       "name": "jwtp.find-roles-sql",
       "type": "java.lang.String",
       "description": "自定义查询用户角色的sql",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties"
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties"
     },
     {
       "name": "jwtp.max-token",
       "type": "java.lang.Integer",
       "description": "单个用户最大的token数量",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties",
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties",
       "defaultValue": -1
     },
     {
       "name": "jwtp.path",
       "type": "java.lang.String[]",
       "description": "拦截路径，多个路径用逗号分隔",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties",
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties",
       "defaultValue": [
         "\/**"
       ]
@@ -52,20 +52,20 @@
       "name": "jwtp.secret-key",
       "type": "java.lang.String",
       "description": "生成token的密钥，有则使用 无则自动生成",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties"
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties"
     },
     {
       "name": "jwtp.store-type",
       "type": "java.lang.Integer",
       "description": "token存储方式，0 redis存储，1 数据库存储，2 不存储 不存储的时候token数量是不限制的",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties",
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties",
       "defaultValue": 0
     },
     {
       "name": "jwtp.url-perm-type",
       "type": "java.lang.Integer",
       "description": "url自动对应权限方式，0 简易模式，1 RESTful模式",
-      "sourceType": "com.github.jwtp.configuration.JwtPermissionProperties"
+      "sourceType": "com.yilers.jwtp.configuration.JwtPermissionProperties"
     }
   ],
   "hints": []

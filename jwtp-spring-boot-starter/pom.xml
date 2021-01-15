@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>jwt-permission-parent</artifactId>
-        <groupId>com.github</groupId>
+        <groupId>com.yilers</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -23,9 +23,9 @@
     <dependencies>
         <!-- jwt-permission -->
         <dependency>
-            <groupId>com.github</groupId>
+            <groupId>com.yilers</groupId>
             <artifactId>jwt-permission</artifactId>
-            <version>1.0</version>
+            <version>${jwtp.version}</version>
         </dependency>
         <!-- spring-boot config -->
         <dependency>
