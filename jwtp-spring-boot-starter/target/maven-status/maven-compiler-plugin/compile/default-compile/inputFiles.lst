@@ -1,0 +1,5 @@
+/Users/stefan/IdeaProjects/JwtPermission/jwtp-spring-boot-starter/src/main/java/com/github/jwtp/configuration/JwtPermissionProperties.java
+/Users/stefan/IdeaProjects/JwtPermission/jwtp-spring-boot-starter/src/main/java/com/github/jwtp/configuration/client/EnableJwtPermissionClient.java
+/Users/stefan/IdeaProjects/JwtPermission/jwtp-spring-boot-starter/src/main/java/com/github/jwtp/configuration/EnableJwtPermission.java
+/Users/stefan/IdeaProjects/JwtPermission/jwtp-spring-boot-starter/src/main/java/com/github/jwtp/configuration/JwtPermissionConfiguration.java
+/Users/stefan/IdeaProjects/JwtPermission/jwtp-spring-boot-starter/src/main/java/com/github/jwtp/configuration/client/JwtPermissionClientConfiguration.java

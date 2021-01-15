@@ -1,0 +1,6 @@
+com/github/jwtp/configuration/client/JwtPermissionClientConfiguration.class
+META-INF/spring-configuration-metadata.json
+com/github/jwtp/configuration/client/EnableJwtPermissionClient.class
+com/github/jwtp/configuration/JwtPermissionProperties.class
+com/github/jwtp/configuration/JwtPermissionConfiguration.class
+com/github/jwtp/configuration/EnableJwtPermission.class
