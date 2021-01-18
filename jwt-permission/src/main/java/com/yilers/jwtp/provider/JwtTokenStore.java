@@ -22,7 +22,7 @@ public class JwtTokenStore extends TokenStoreAbstract {
 
     @Override
     public int storeToken(Token token) {
-        return 0;
+        return 1;
     }
 
     @Override
