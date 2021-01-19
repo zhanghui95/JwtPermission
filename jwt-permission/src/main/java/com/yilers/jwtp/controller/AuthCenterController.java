@@ -2,6 +2,7 @@ package com.yilers.jwtp.controller;
 
 import com.yilers.jwtp.annotation.Ignore;
 import com.yilers.jwtp.client.AuthResult;
+import com.yilers.jwtp.provider.JwtTokenStore;
 import com.yilers.jwtp.provider.Token;
 import com.yilers.jwtp.provider.TokenStore;
 import com.yilers.jwtp.util.TokenUtil;
@@ -39,10 +40,14 @@ public class AuthCenterController {
             String userId = TokenUtil.parseToken(access_token, tokenKey);
             // 检查token是否存在系统中
             Token token = tokenStore.findToken(userId, access_token);
-            if (token == null) {
-                logger.debug("ERROR: Token Not Found");
-                authResult.setCode(AuthResult.CODE_ERROR);
-                return authResult;
+            if (tokenStore instanceof JwtTokenStore) {
+                logger.debug("不检查是否存在");
+            } else {
+                if (token == null) {
+                    logger.debug("ERROR: Token Not Found");
+                    authResult.setCode(AuthResult.CODE_ERROR);
+                    return authResult;
+                }
             }
             // 查询用户的角色和权限
             token.setRoles(tokenStore.findRolesByUserId(userId, token));

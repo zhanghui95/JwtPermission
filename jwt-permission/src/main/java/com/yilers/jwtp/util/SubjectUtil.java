@@ -1,6 +1,7 @@
 package com.yilers.jwtp.util;
 
 import com.yilers.jwtp.annotation.Logical;
+import com.yilers.jwtp.exception.ExpiredTokenException;
 import com.yilers.jwtp.provider.Token;
 import com.yilers.jwtp.provider.TokenStore;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -161,7 +162,8 @@ public class SubjectUtil {
      * @return Token
      */
     public static Token parseToken(HttpServletRequest request) {
-        return parseToken(request, getBean(TokenStore.class));
+        TokenStore bean = SpringUtil.getBean(TokenStore.class);
+        return parseToken(request, bean);
     }
 
     /**
@@ -188,7 +190,7 @@ public class SubjectUtil {
                         token.setPermissions(tokenStore.findPermissionsByUserId(userId, token));
                     }
                 } catch (ExpiredJwtException e) {
-                    throw new RuntimeException("token已过期");
+                    throw new ExpiredTokenException();
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }

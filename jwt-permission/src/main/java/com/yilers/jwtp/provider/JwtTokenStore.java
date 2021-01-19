@@ -1,7 +1,18 @@
 package com.yilers.jwtp.provider;
 
+import com.yilers.jwtp.util.JacksonUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -11,6 +22,12 @@ import java.util.List;
  * @date: 2021/1/14 5:17 下午
  **/
 public class JwtTokenStore extends TokenStoreAbstract {
+    private final JdbcTemplate jdbcTemplate;
+
+    public JwtTokenStore(DataSource dataSource) {
+        Assert.notNull(dataSource, "DataSource required");
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 
     @Override
     public String getTokenKey() {
@@ -27,7 +44,13 @@ public class JwtTokenStore extends TokenStoreAbstract {
 
     @Override
     public Token findToken(String userId, String access_token) {
-        return null;
+        Token token = new Token();
+        token.setUserId(userId);
+        token.setAccessToken(access_token);
+        Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(mTokenKey).build().parseClaimsJws(access_token);
+        String expireTime = claimsJws.getBody().getExpiration().toString();
+        token.setExpireTime(expireTime);
+        return token;
     }
 
     @Override
@@ -62,11 +85,39 @@ public class JwtTokenStore extends TokenStoreAbstract {
 
     @Override
     public String[] findRolesByUserId(String userId, Token token) {
-        return new String[0];
+        // 判断是否自定义查询
+        if (getFindRolesSql() == null || getFindRolesSql().trim().isEmpty()) {
+            return token.getRoles();
+        }
+        try {
+            List<String> roleList = jdbcTemplate.query(getFindRolesSql(), new RowMapper<String>() {
+                @Override
+                public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    return rs.getString(1);
+                }
+            }, userId);
+            return JacksonUtil.stringListToArray(roleList);
+        } catch (EmptyResultDataAccessException e) {
+        }
+        return null;
     }
 
     @Override
     public String[] findPermissionsByUserId(String userId, Token token) {
-        return new String[0];
+        // 判断是否自定义查询
+        if (getFindPermissionsSql() == null || getFindPermissionsSql().trim().isEmpty()) {
+            return token.getPermissions();
+        }
+        try {
+            List<String> permList = jdbcTemplate.query(getFindPermissionsSql(), new RowMapper<String>() {
+                @Override
+                public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    return rs.getString(1);
+                }
+            }, userId);
+            return JacksonUtil.stringListToArray(permList);
+        } catch (EmptyResultDataAccessException e) {
+        }
+        return null;
     }
 }

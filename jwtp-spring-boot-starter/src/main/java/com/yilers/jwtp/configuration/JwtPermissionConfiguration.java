@@ -70,9 +70,10 @@ public class JwtPermissionConfiguration implements WebMvcConfigurer, Application
     @Bean
     @ConditionalOnProperty(name = "jwtp.store-type", havingValue = "2")
     public TokenStore jwtTokenStore() {
+        DataSource dataSource = getBean(DataSource.class);
         // token不限制
         properties.setMaxToken(-1);
-        return new JwtTokenStore();
+        return new JwtTokenStore(dataSource);
     }
 
     /**

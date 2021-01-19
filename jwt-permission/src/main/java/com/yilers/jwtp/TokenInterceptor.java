@@ -3,6 +3,7 @@ package com.yilers.jwtp;
 import com.yilers.jwtp.exception.ErrorTokenException;
 import com.yilers.jwtp.exception.ExpiredTokenException;
 import com.yilers.jwtp.exception.UnauthorizedException;
+import com.yilers.jwtp.global.Const;
 import com.yilers.jwtp.perm.UrlPerm;
 import com.yilers.jwtp.provider.Token;
 import com.yilers.jwtp.provider.TokenStore;
@@ -13,7 +14,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ import java.lang.reflect.Method;
  * 拦截器
  * Created by wangfan on 2018-12-27 下午 4:46.
  */
-public class TokenInterceptor extends HandlerInterceptorAdapter {
+public class TokenInterceptor implements HandlerInterceptor {
     protected final Log logger = LogFactory.getLog(this.getClass());
     private TokenStore tokenStore;
     private UrlPerm urlPerm;
@@ -58,8 +59,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 放行options请求
-        if (request.getMethod().toUpperCase().equals("OPTIONS")) {
+        /**
+         * 放行options请求
+         */
+        if (Const.OPTIONS.equalsIgnoreCase(request.getMethod())) {
             CheckPermissionUtil.passOptions(response);
             return false;
         }
@@ -69,7 +72,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         }
         // 检查是否忽略权限验证
         if (method == null || CheckPermissionUtil.checkIgnore(method)) {
-            return super.preHandle(request, response, handler);
+            return true;
         }
         // 获取token
         String access_token = CheckPermissionUtil.takeToken(request);
@@ -101,7 +104,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
             throw new UnauthorizedException();
         }
         request.setAttribute(SubjectUtil.REQUEST_TOKEN_NAME, token);
-        return super.preHandle(request, response, handler);
+        return true;
     }
 
 }

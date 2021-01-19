@@ -204,8 +204,8 @@ public class JdbcTokenStore extends TokenStoreAbstract {
             String user_id = rs.getString("user_id");
             String access_token = rs.getString("access_token");
             String refresh_token = rs.getString("refresh_token");
-            Date expire_time = timestampToDate(rs.getTimestamp("expire_time"));
-            Date refresh_token_expire_time = timestampToDate(rs.getTimestamp("refresh_token_expire_time"));
+            String expire_time = timestampToDate(rs.getTimestamp("expire_time"));
+            String refresh_token_expire_time = timestampToDate(rs.getTimestamp("refresh_token_expire_time"));
             String roles = rs.getString("roles");
             String permissions = rs.getString("permissions");
             Token token = new Token();
@@ -220,9 +220,9 @@ public class JdbcTokenStore extends TokenStoreAbstract {
             return token;
         }
 
-        private Date timestampToDate(java.sql.Timestamp timestamp) {
+        private String timestampToDate(java.sql.Timestamp timestamp) {
             if (timestamp != null) {
-                return new Date(timestamp.getTime());
+                return new Date(timestamp.getTime()).toString();
             }
             return null;
         }

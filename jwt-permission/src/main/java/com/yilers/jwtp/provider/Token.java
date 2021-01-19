@@ -1,7 +1,6 @@
 package com.yilers.jwtp.provider;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Token实体类
@@ -27,11 +26,11 @@ public class Token implements Serializable {
     /**
      * 过期时间
      */
-    private Date expireTime;
+    private String expireTime;
     /**
      * refresh_token过期时间
      */
-    private Date refreshTokenExpireTime;
+    private String refreshTokenExpireTime;
 
     /**
      * 用户角色
@@ -74,11 +73,11 @@ public class Token implements Serializable {
         this.refreshToken = refreshToken;
     }
 
-    public Date getExpireTime() {
+    public String getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(Date expireTime) {
+    public void setExpireTime(String expireTime) {
         this.expireTime = expireTime;
     }
 
@@ -98,11 +97,11 @@ public class Token implements Serializable {
         this.permissions = permissions;
     }
 
-    public Date getRefreshTokenExpireTime() {
+    public String getRefreshTokenExpireTime() {
         return refreshTokenExpireTime;
     }
 
-    public void setRefreshTokenExpireTime(Date refreshTokenExpireTime) {
+    public void setRefreshTokenExpireTime(String refreshTokenExpireTime) {
         this.refreshTokenExpireTime = refreshTokenExpireTime;
     }
 }

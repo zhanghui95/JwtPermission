@@ -3,6 +3,7 @@ package com.yilers.jwtp.client;
 import com.yilers.jwtp.exception.ErrorTokenException;
 import com.yilers.jwtp.exception.ExpiredTokenException;
 import com.yilers.jwtp.exception.UnauthorizedException;
+import com.yilers.jwtp.global.Const;
 import com.yilers.jwtp.perm.UrlPerm;
 import com.yilers.jwtp.util.CheckPermissionUtil;
 import com.yilers.jwtp.util.SubjectUtil;
@@ -55,7 +56,7 @@ public class ClientInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 放行options请求
-        if (request.getMethod().toUpperCase().equals("OPTIONS")) {
+        if (Const.OPTIONS.equalsIgnoreCase(request.getMethod())) {
             CheckPermissionUtil.passOptions(response);
             return false;
         }
