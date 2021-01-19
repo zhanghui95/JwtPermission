@@ -1,6 +1,0 @@
-com/yilers/jwtp/configuration/client/EnableJwtPermissionClient.class
-META-INF/spring-configuration-metadata.json
-com/yilers/jwtp/configuration/EnableJwtPermission.class
-com/yilers/jwtp/configuration/client/JwtPermissionClientConfiguration.class
-com/yilers/jwtp/configuration/JwtPermissionProperties.class
-com/yilers/jwtp/configuration/JwtPermissionConfiguration.class
