@@ -162,7 +162,7 @@ public class SubjectUtil {
      * @return Token
      */
     public static Token parseToken(HttpServletRequest request) {
-        TokenStore bean = SpringUtil.getBean(TokenStore.class);
+        TokenStore bean = getBean(TokenStore.class);
         return parseToken(request, bean);
     }
 

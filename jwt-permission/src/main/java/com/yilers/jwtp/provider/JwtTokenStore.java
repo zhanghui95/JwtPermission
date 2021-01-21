@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class JwtTokenStore extends TokenStoreAbstract {
         token.setUserId(userId);
         token.setAccessToken(access_token);
         Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(mTokenKey).build().parseClaimsJws(access_token);
-        String expireTime = claimsJws.getBody().getExpiration().toString();
+        Date expireTime = claimsJws.getBody().getExpiration();
         token.setExpireTime(expireTime);
         return token;
     }

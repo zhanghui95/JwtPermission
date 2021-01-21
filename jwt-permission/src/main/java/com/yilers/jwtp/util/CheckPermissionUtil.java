@@ -106,9 +106,9 @@ public class CheckPermissionUtil {
         String access_token = request.getParameter("access_token");
         if (access_token == null || access_token.trim().isEmpty()) {
             access_token = request.getHeader("Authorization");
-            if (access_token != null && access_token.length() >= 7) {
-                access_token = access_token.substring(7);
-            }
+//            if (access_token != null && access_token.length() >= 7) {
+//                access_token = access_token.substring(7);
+//            }
         }
         return access_token;
     }

@@ -90,13 +90,13 @@ public class TokenUtil {
         Token token = new Token();
         token.setUserId(subject);
         token.setAccessToken(access_token);
-        token.setExpireTime(expireDate.toString());
+        token.setExpireTime(expireDate);
         // 生成refresh_token
         if (needRt) {
             Date refreshExpireDate = new Date(System.currentTimeMillis() + 1000 * rtExpire);
             String refresh_token = Jwts.builder().setSubject(subject).signWith(key).setExpiration(refreshExpireDate).compact();
             token.setRefreshToken(refresh_token);
-            token.setRefreshTokenExpireTime(refreshExpireDate.toString());
+            token.setRefreshTokenExpireTime(refreshExpireDate);
         }
         return token;
     }

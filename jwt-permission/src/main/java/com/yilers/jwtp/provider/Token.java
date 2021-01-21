@@ -1,6 +1,10 @@
 package com.yilers.jwtp.provider;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Token实体类
@@ -26,11 +30,15 @@ public class Token implements Serializable {
     /**
      * 过期时间
      */
-    private String expireTime;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date expireTime;
     /**
      * refresh_token过期时间
      */
-    private String refreshTokenExpireTime;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date refreshTokenExpireTime;
 
     /**
      * 用户角色
@@ -73,11 +81,11 @@ public class Token implements Serializable {
         this.refreshToken = refreshToken;
     }
 
-    public String getExpireTime() {
+    public Date getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(String expireTime) {
+    public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
     }
 
@@ -97,11 +105,11 @@ public class Token implements Serializable {
         this.permissions = permissions;
     }
 
-    public String getRefreshTokenExpireTime() {
+    public Date getRefreshTokenExpireTime() {
         return refreshTokenExpireTime;
     }
 
-    public void setRefreshTokenExpireTime(String refreshTokenExpireTime) {
+    public void setRefreshTokenExpireTime(Date refreshTokenExpireTime) {
         this.refreshTokenExpireTime = refreshTokenExpireTime;
     }
 }
