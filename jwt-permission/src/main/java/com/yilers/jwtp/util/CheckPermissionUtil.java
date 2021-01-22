@@ -63,7 +63,8 @@ public class CheckPermissionUtil {
     public static boolean checkRole(Token token, HttpServletRequest request, HttpServletResponse response, Object handler, UrlPerm urlPerm) {
         Method method = ((HandlerMethod) handler).getMethod();
         RequiresRoles annotation = method.getAnnotation(RequiresRoles.class);
-        if (annotation == null) {  // 方法上没有注解再检查类上面有没有注解
+        // 方法上没有注解再检查类上面有没有注解
+        if (annotation == null) {
             annotation = method.getDeclaringClass().getAnnotation(RequiresRoles.class);
         }
         String[] requiresRoles;
@@ -106,9 +107,11 @@ public class CheckPermissionUtil {
         String access_token = request.getParameter("access_token");
         if (access_token == null || access_token.trim().isEmpty()) {
             access_token = request.getHeader("Authorization");
-//            if (access_token != null && access_token.length() >= 7) {
-//                access_token = access_token.substring(7);
-//            }
+            // 去除 bearer 前缀
+            if (access_token != null && access_token.length() >= 7 &&
+                    (access_token.startsWith("bearer ") || access_token.startsWith("Bearer "))) {
+                access_token = access_token.substring(7);
+            }
         }
         return access_token;
     }
