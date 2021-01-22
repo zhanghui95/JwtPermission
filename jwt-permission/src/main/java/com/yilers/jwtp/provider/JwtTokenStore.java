@@ -61,7 +61,12 @@ public class JwtTokenStore extends TokenStoreAbstract {
 
     @Override
     public Token findRefreshToken(String userId, String refresh_token) {
-        return null;
+        Token token = new Token();
+        token.setUserId(userId);
+        Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(mTokenKey).build().parseClaimsJws(refresh_token);
+        Date expireTime = claimsJws.getBody().getExpiration();
+        token.setRefreshTokenExpireTime(expireTime);
+        return token;
     }
 
     @Override
