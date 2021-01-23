@@ -1,6 +1,7 @@
 package com.yilers.jwtp.provider;
 
 import com.yilers.jwtp.util.JacksonUtil;
+import com.yilers.jwtp.util.TokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -48,7 +49,7 @@ public class JwtTokenStore extends TokenStoreAbstract {
         Token token = new Token();
         token.setUserId(userId);
         token.setAccessToken(access_token);
-        Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(mTokenKey).build().parseClaimsJws(access_token);
+        Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(TokenUtil.parseHexKey(mTokenKey)).build().parseClaimsJws(access_token);
         Date expireTime = claimsJws.getBody().getExpiration();
         token.setExpireTime(expireTime);
         return token;
@@ -63,7 +64,7 @@ public class JwtTokenStore extends TokenStoreAbstract {
     public Token findRefreshToken(String userId, String refresh_token) {
         Token token = new Token();
         token.setUserId(userId);
-        Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(mTokenKey).build().parseClaimsJws(refresh_token);
+        Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(TokenUtil.parseHexKey(mTokenKey)).build().parseClaimsJws(refresh_token);
         Date expireTime = claimsJws.getBody().getExpiration();
         token.setRefreshTokenExpireTime(expireTime);
         return token;
