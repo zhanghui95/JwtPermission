@@ -1,7 +1,89 @@
 # JwtPermission
 
+## 1. 项目介绍
 项目基于 https://github.com/whvcse/JwtPermission
+> 基于token验证的Java Web权限控制框架，使用jjwt，支持redis和db多种存储方式，可用于前后端分离项目，功能完善、使用简单、易于扩展。
 
+曾经发现原作者这个项目感觉很轻量 简单 实用，但是可能因为别的原因很长一段时间没有更新，主页提的issues也没回复，因为自己也有需求想要加入就自己基于源码添加实现并发布中央仓库。
+
+## 2. 使用
+
+### 2.1 SpringBoot项目引入依赖
+```xml
+<dependency>
+    <groupId>com.yilers</groupId>
+    <artifactId>jwtp-spring-boot-starter</artifactId>
+    <version>1.5.0</version>
+</dependency>
+```
+### 2.2 加注解
+在启动类上面加入`@EnableJwtPermission`注解
+
+### 2.3 添加配置
+```properties
+## 0-redisTokenStore 1-jdbcTokenStore 2-jwtTokenStore 默认是0
+jwtp.store-type=0
+
+## 生成token的密钥 redis和jdbc类型可以不指定 jwt模式下必须指定
+jwtp.secret-key=123456
+
+## 拦截路径，默认是/**
+jwtp.path=/**
+
+## 排除拦截路径，默认无
+jwtp.exclude-path=/login
+
+## 单个用户最大token数，默认-1不限制
+jwtp.max-token=10
+
+## url自动对应权限方式，0 简易模式，1 RESTful模式
+jwtp.url-perm-type=0
+
+## 自定义查询用户权限的sql
+jwtp.find-permissions-sql=SELECT authority FROM sys_user_authorities WHERE user_id = ?
+
+## 自定义查询用户角色的sql
+jwtp.find-roles-sql=SELECT role_id FROM sys_user_role WHERE user_id = ?
+
+```
+
+### 2.4 登陆生成token
+```java
+@RestController
+public class LoginController {
+    @Autowired
+    private TokenStore tokenStore;
+    
+    @PostMapping("/token")
+    public Result<Token> token(String account, String password) {
+        // 你的验证逻辑
+        // ......
+        // 签发token 有多种重载形式
+        Token token = tokenStore.createNewToken(userId, permissions, roles, expire);
+        Result.ok(token);
+    }
+}
+
+```
+> 更多使用参考原作者详细文档 https://gitee.com/whvse/JwtPermission/wikis/pages
+
+### 2.5 变更点
+```
+1. 升级底层依赖包版本
+2. 更换过时API
+3. 增加jwtTokenStore无存储token方式
+4. 增加自定义密钥配置
+5. 统一认证地址可配置多个
+6. 代码注释等优化
+
+说明：
+1. 在jwtp.store-type=2选择jwt方式，是不存储token的 所以jwtp.max-token是不限制的
+2. 在jwtp.store-type=2选择jwt方式，必须配置jwtp.secret-key密钥 不然启动失败
+3. 在jwtp.store-type=2选择jwt方式，是没有刷新token的
+```
+
+### 2.6 更新记录
+```
 2021.01.15 1.0版本 存在bug不能使用
 1. 升级依赖版本
 2. 添加无存储token方式
@@ -28,3 +110,4 @@
 2021.01.25 1.5.0版本
 1. 处理没有指定密钥加密错误
 2. jwt方式不生成刷新token
+```
