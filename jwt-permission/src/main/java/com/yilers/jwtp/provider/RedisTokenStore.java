@@ -16,11 +16,16 @@ import java.util.List;
  * Created by wangfan on 2018-12-29 上午 9:10.
  */
 public class RedisTokenStore extends TokenStoreAbstract {
-    private static final String KEY_TOKEN_KEY = "oauth_token_key";  // tokenKey存储的key
-    private static final String KEY_PRE_TOKEN = "oauth_token:";  // token存储的key前缀
-    private static final String KEY_PRE_REFRESH_TOKEN = "oauth_refresh_token:";  // refresh_token存储的key前缀
-    private static final String KEY_PRE_ROLE = "oauth_role:";  // 角色存储的key前缀
-    private static final String KEY_PRE_PERM = "oauth_prem:";  // 权限存储的key前缀
+    // tokenKey存储的key
+    private static final String KEY_TOKEN_KEY = "oauth_token_key";
+    // token存储的key前缀
+    private static final String KEY_PRE_TOKEN = "oauth_token:";
+    // refresh_token存储的key前缀
+    private static final String KEY_PRE_REFRESH_TOKEN = "oauth_refresh_token:";
+    // 角色存储的key前缀
+    private static final String KEY_PRE_ROLE = "oauth_role:";
+    // 权限存储的key前缀
+    private static final String KEY_PRE_PERM = "oauth_prem:";
     private final StringRedisTemplate redisTemplate;
     private final Object jdbcTemplate;
 

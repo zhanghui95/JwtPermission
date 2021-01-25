@@ -31,7 +31,7 @@ jwtp.secret-key=123456
 jwtp.path=/**
 
 ## 排除拦截路径，默认无
-jwtp.exclude-path=/login
+jwtp.exclude-path=/login,/swagger-resources/**
 
 ## 单个用户最大token数，默认-1不限制
 jwtp.max-token=10
@@ -44,7 +44,6 @@ jwtp.find-permissions-sql=SELECT authority FROM sys_user_authorities WHERE user_
 
 ## 自定义查询用户角色的sql
 jwtp.find-roles-sql=SELECT role_id FROM sys_user_role WHERE user_id = ?
-
 ```
 
 ### 2.4 登陆生成token
@@ -59,15 +58,36 @@ public class LoginController {
         // 你的验证逻辑
         // ......
         // 签发token 有多种重载形式
-        Token token = tokenStore.createNewToken(userId, permissions, roles, expire);
+        Token token = tokenStore.createNewToken(userId);
         Result.ok(token);
     }
 }
-
 ```
 > 更多使用参考原作者详细文档 https://gitee.com/whvse/JwtPermission/wikis/pages
 
-### 2.5 变更点
+### 2.5 其他
+```
+1. 接口权限校验
+// 需要有system权限才能访问
+@RequiresPermissions("system")
+// 需要有system和front权限才能访问,logical可以不写,默认是AND
+@RequiresPermissions(value={"system","front"}, logical=Logical.AND)
+// 需要有system或front权限才能访问
+@RequiresPermissions(value={"system","front"}, logical=Logical.OR)
+// 需要有admin或user角色才能访问
+@RequiresRoles(value={"admin","user"}, logical=Logical.OR)
+
+2. 接口忽略鉴权
+可以在配置文件中配置排除拦截路径 或 使用注解@Ignore忽略验证
+
+3. 自定义查询用户权限 角色sql
+配置上可自动查询用户角色与权限
+
+4. 前后端规约
+前端需要在请求头添加 "Authorization":'Bearer '+ token，注意Bearer后有一个空格
+```
+
+### 2.6 变更点
 ```
 1. 升级底层依赖包版本
 2. 更换过时API
@@ -78,11 +98,12 @@ public class LoginController {
 
 说明：
 1. 在jwtp.store-type=2选择jwt方式，是不存储token的 所以jwtp.max-token是不限制的
-2. 在jwtp.store-type=2选择jwt方式，必须配置jwtp.secret-key密钥 不然启动失败
+2. 在jwtp.store-type=2选择jwt方式，必须配置jwtp.secret-key自定义密钥 不然启动失败
 3. 在jwtp.store-type=2选择jwt方式，是没有刷新token的
+4. 统一认证中心地址 多个用逗号分隔 jwtp.auth-center-url=http://localhost:8082,http://localhost:8083
 ```
 
-### 2.6 更新记录
+### 2.7 更新记录
 ```
 2021.01.15 1.0版本 存在bug不能使用
 1. 升级依赖版本
