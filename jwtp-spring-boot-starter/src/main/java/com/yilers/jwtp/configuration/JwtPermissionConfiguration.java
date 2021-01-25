@@ -107,6 +107,10 @@ public class JwtPermissionConfiguration implements WebMvcConfigurer, Application
             tokenStore.setFindRolesSql(properties.getFindRolesSql());
             tokenStore.setFindPermissionsSql(properties.getFindPermissionsSql());
             tokenStore.setMTokenKey(properties.getSecretKey());
+            if (tokenStore instanceof JwtTokenStore) {
+                logger.debug("jwt方式不需要刷新token");
+                tokenStore.setNeedRt(false);
+            }
         } else {
             logger.error("JWTP: Unknown TokenStore");
         }

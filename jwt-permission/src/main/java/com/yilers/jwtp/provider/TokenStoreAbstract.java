@@ -9,6 +9,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -40,6 +41,11 @@ public abstract class TokenStoreAbstract implements TokenStore {
      */
     public String mTokenKey;
 
+    /**
+     * 是否需要刷新token
+     */
+    public boolean needRt = true;
+
     @Override
     public Token createNewToken(String userId) {
         return createNewToken(userId, null, null);
@@ -69,7 +75,7 @@ public abstract class TokenStoreAbstract implements TokenStore {
     public Token createNewToken(String userId, String[] permissions, String[] roles, long expire, long rtExpire) {
         String tokenKey = getTokenKey();
         logger.debug("TOKEN_KEY: " + tokenKey);
-        Token token = TokenUtil.buildToken(userId, expire, rtExpire, TokenUtil.parseHexKey(tokenKey));
+        Token token = TokenUtil.buildToken(userId, expire, rtExpire, TokenUtil.parseHexKey(tokenKey), needRt);
         token.setRoles(roles);
         token.setPermissions(permissions);
         if (storeToken(token) > 0) {
@@ -151,11 +157,17 @@ public abstract class TokenStoreAbstract implements TokenStore {
 
     @Override
     public void setMTokenKey(String secretKey) {
-        String s = SecureUtil.md5(secretKey);
-        SecretKey secretKeySpec = new SecretKeySpec(s.getBytes(), SignatureAlgorithm.HS256.getJcaName());
-        byte[] encoded = secretKeySpec.getEncoded();
-        String hexStr = Hex.encodeToString(encoded);
-        this.mTokenKey = hexStr;
+        if (StringUtils.hasText(secretKey)) {
+            logger.debug("使用了自定义secret");
+            String s = SecureUtil.md5(secretKey);
+            SecretKey secretKeySpec = new SecretKeySpec(s.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+            byte[] encoded = secretKeySpec.getEncoded();
+            String hexStr = Hex.encodeToString(encoded);
+            this.mTokenKey = hexStr;
+        } else {
+            logger.debug("默认生成");
+            this.mTokenKey = null;
+        }
     }
 
     @Override
@@ -163,4 +175,8 @@ public abstract class TokenStoreAbstract implements TokenStore {
         return mTokenKey;
     }
 
+    @Override
+    public void setNeedRt(boolean needRt) {
+        this.needRt = needRt;
+    }
 }

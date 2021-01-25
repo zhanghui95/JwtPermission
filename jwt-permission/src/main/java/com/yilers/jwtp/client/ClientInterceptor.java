@@ -3,10 +3,10 @@ package com.yilers.jwtp.client;
 import com.yilers.jwtp.exception.ErrorTokenException;
 import com.yilers.jwtp.exception.ExpiredTokenException;
 import com.yilers.jwtp.exception.UnauthorizedException;
-import com.yilers.jwtp.global.Const;
 import com.yilers.jwtp.perm.UrlPerm;
 import com.yilers.jwtp.util.CheckPermissionUtil;
 import com.yilers.jwtp.util.SubjectUtil;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -56,7 +56,7 @@ public class ClientInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 放行options请求
-        if (Const.OPTIONS.equalsIgnoreCase(request.getMethod())) {
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
             CheckPermissionUtil.passOptions(response);
             return false;
         }
@@ -66,7 +66,6 @@ public class ClientInterceptor implements HandlerInterceptor {
         }
         // 检查是否忽略权限验证
         if (method == null || CheckPermissionUtil.checkIgnore(method)) {
-//            return super.preHandle(request, response, handler);
             return true;
         }
         // 获取token
@@ -99,7 +98,6 @@ public class ClientInterceptor implements HandlerInterceptor {
             throw new UnauthorizedException();
         }
         request.setAttribute(SubjectUtil.REQUEST_TOKEN_NAME, authResult.getToken());
-//        return super.preHandle(request, response, handler);
         return true;
     }
 

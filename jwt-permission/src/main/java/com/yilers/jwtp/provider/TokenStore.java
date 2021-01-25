@@ -225,4 +225,10 @@ public interface TokenStore {
      */
     String getMTokenKey();
 
+    /**
+     * 设置是否生成刷新token
+     * @param needRt
+     */
+    void setNeedRt(boolean needRt);
+
 }

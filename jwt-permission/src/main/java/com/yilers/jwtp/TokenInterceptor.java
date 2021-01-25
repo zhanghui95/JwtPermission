@@ -3,7 +3,6 @@ package com.yilers.jwtp;
 import com.yilers.jwtp.exception.ErrorTokenException;
 import com.yilers.jwtp.exception.ExpiredTokenException;
 import com.yilers.jwtp.exception.UnauthorizedException;
-import com.yilers.jwtp.global.Const;
 import com.yilers.jwtp.perm.UrlPerm;
 import com.yilers.jwtp.provider.Token;
 import com.yilers.jwtp.provider.TokenStore;
@@ -13,6 +12,7 @@ import com.yilers.jwtp.util.TokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -62,7 +62,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         /**
          * 放行options请求
          */
-        if (Const.OPTIONS.equalsIgnoreCase(request.getMethod())) {
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
             CheckPermissionUtil.passOptions(response);
             return false;
         }

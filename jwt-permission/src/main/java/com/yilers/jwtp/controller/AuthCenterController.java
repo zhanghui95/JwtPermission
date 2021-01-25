@@ -41,7 +41,7 @@ public class AuthCenterController {
             // 检查token是否存在系统中
             Token token = tokenStore.findToken(userId, access_token);
             if (tokenStore instanceof JwtTokenStore) {
-                logger.debug("不检查是否存在");
+                logger.debug("jwt方式不检查是否存在");
             } else {
                 if (token == null) {
                     logger.debug("ERROR: Token Not Found");
