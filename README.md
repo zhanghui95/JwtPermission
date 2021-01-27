@@ -39,6 +39,9 @@ jwtp.max-token=10
 ## url自动对应权限方式，0 简易模式，1 RESTful模式
 jwtp.url-perm-type=0
 
+## 统一认证中心地址
+jwtp.auth-center-url=http://localhost:8082,http://localhost:8083
+
 ## 自定义查询用户权限的sql
 jwtp.find-permissions-sql=SELECT authority FROM sys_user_authorities WHERE user_id = ?
 
@@ -70,10 +73,13 @@ public class LoginController {
 1. 接口权限校验
 // 需要有system权限才能访问
 @RequiresPermissions("system")
+
 // 需要有system和front权限才能访问,logical可以不写,默认是AND
 @RequiresPermissions(value={"system","front"}, logical=Logical.AND)
+
 // 需要有system或front权限才能访问
 @RequiresPermissions(value={"system","front"}, logical=Logical.OR)
+
 // 需要有admin或user角色才能访问
 @RequiresRoles(value={"admin","user"}, logical=Logical.OR)
 
@@ -85,6 +91,28 @@ public class LoginController {
 
 4. 前后端规约
 前端需要在请求头添加 "Authorization":'Bearer '+ token，注意Bearer后有一个空格
+
+5. 统一认证
+当A服务提供token颁发 鉴权，B服务作为资源服务受A服务统一鉴权保护
+5.1 B服务配置 jwtp.auth-center-url 用于服务统一认证调用
+5.2 B服务启动类添加 @EnableJwtPermissionClient 注解
+
+6. jwtp.store-type说明
+当采用redis存储时自行配置redis集成用于token存储
+当采用db存储时，需要导入提供的脚本
+当采用jwt无存储时，token过期时间不易设置太长
+
+7. 获取当前用户信息
+// 正常可以这样获取
+Token token = SubjectUtil.getToken(request);
+
+// 对于排除拦截的接口可以这样获取
+Token token = SubjectUtil.parseToken(request);
+说明：在我使用时发现对于添加@Ignore忽略鉴权的接口 SubjectUtil.parseToken(request)是有问题的，目前没有很好的办法，我是这样处理的
+String accessToken = CheckPermissionUtil.takeToken(request);
+String tokenKey = tokenStore.getTokenKey();
+String userId = TokenUtil.parseToken(accessToken, tokenKey);
+
 ```
 
 ### 2.6 变更点
