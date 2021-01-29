@@ -76,6 +76,9 @@ public class CheckPermissionUtil {
         if (annotation != null) {
             requiresRoles = annotation.value();
             logical = annotation.logical();
+        } else if (urlPerm instanceof JwtUrlPerm) {
+            // jwtUrlPerm只校验接口有注解角色权限的
+            return true;
         } else if (urlPerm != null) {
             UrlPermResult upr = urlPerm.getRoles(request, response, (HandlerMethod) handler);
             requiresRoles = upr.getValues();
