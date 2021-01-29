@@ -4,6 +4,7 @@ import com.yilers.jwtp.annotation.Ignore;
 import com.yilers.jwtp.annotation.Logical;
 import com.yilers.jwtp.annotation.RequiresPermissions;
 import com.yilers.jwtp.annotation.RequiresRoles;
+import com.yilers.jwtp.perm.JwtUrlPerm;
 import com.yilers.jwtp.perm.UrlPerm;
 import com.yilers.jwtp.perm.UrlPermResult;
 import com.yilers.jwtp.provider.Token;
@@ -47,6 +48,9 @@ public class CheckPermissionUtil {
         if (annotation != null) {
             requiresPermissions = annotation.value();
             logical = annotation.logical();
+        } else if (urlPerm instanceof JwtUrlPerm) {
+            // jwtUrlPerm只校验接口有注解角色权限的
+            return true;
         } else if (urlPerm != null) {
             UrlPermResult upr = urlPerm.getPermission(request, response, (HandlerMethod) handler);
             requiresPermissions = upr.getValues();

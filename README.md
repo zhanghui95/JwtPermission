@@ -13,7 +13,7 @@
 <dependency>
     <groupId>com.yilers</groupId>
     <artifactId>jwtp-spring-boot-starter</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
 </dependency>
 ```
 ### 2.2 加注解
@@ -36,7 +36,7 @@ jwtp.exclude-path=/login,/swagger-resources/**
 ## 单个用户最大token数，默认-1不限制
 jwtp.max-token=10
 
-## url自动对应权限方式，0 简易模式，1 RESTful模式
+## url自动对应权限方式，0 简易模式，1 RESTful模式，2 接口处根据注解校验
 jwtp.url-perm-type=0
 
 ## 统一认证中心地址
@@ -159,4 +159,8 @@ String userId = TokenUtil.parseToken(accessToken, tokenKey);
 2021.01.25 1.5.0版本
 1. 处理没有指定密钥加密错误
 2. jwt方式不生成刷新token
+
+2021.01.29 1.5.1版本
+1. 加入jwtp.url-perm-type=2 不自动校验，只有接口添加鉴权注解才去校验
+2. 判断权限NPE处理
 ```

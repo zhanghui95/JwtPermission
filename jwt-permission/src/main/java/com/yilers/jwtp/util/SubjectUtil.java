@@ -6,6 +6,7 @@ import com.yilers.jwtp.provider.Token;
 import com.yilers.jwtp.provider.TokenStore;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -209,8 +210,14 @@ public class SubjectUtil {
      */
     private static boolean contains(String[] strs, String str) {
         for (int i = 0; i < strs.length; i++) {
-            if (strs[i].equals(str)) {
-                return true;
+            // 处理空指针
+            String str1 = strs[i];
+            if (StringUtils.hasText(str1)) {
+                if (str1.equals(str)) {
+                    return true;
+                }
+            } else {
+                continue;
             }
         }
         return false;

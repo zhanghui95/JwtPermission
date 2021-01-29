@@ -15,7 +15,7 @@ public class JwtPermissionProperties {
     private Integer storeType = 0;
 
     /**
-     * url自动对应权限方式，0 简易模式，1 RESTful模式
+     * url自动对应权限方式，0 简易模式，1 RESTful模式，2 不校验接口请求
      */
     private Integer urlPermType;
 

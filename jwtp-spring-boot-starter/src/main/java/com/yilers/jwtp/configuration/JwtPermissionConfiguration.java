@@ -1,6 +1,7 @@
 package com.yilers.jwtp.configuration;
 
 import com.yilers.jwtp.TokenInterceptor;
+import com.yilers.jwtp.perm.JwtUrlPerm;
 import com.yilers.jwtp.perm.RestUrlPerm;
 import com.yilers.jwtp.perm.SimpleUrlPerm;
 import com.yilers.jwtp.perm.UrlPerm;
@@ -92,6 +93,16 @@ public class JwtPermissionConfiguration implements WebMvcConfigurer, Application
     @Bean
     public UrlPerm restUrlPerm() {
         return new RestUrlPerm();
+    }
+
+
+    /**
+     * 注入jwtUrlPerm
+     */
+    @Bean
+    @ConditionalOnProperty(name = "jwtp.url-perm-type", havingValue = "2")
+    public UrlPerm jwtUrlPerm() {
+        return new JwtUrlPerm();
     }
 
     /**
