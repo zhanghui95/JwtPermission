@@ -13,7 +13,7 @@
 <dependency>
     <groupId>com.yilers</groupId>
     <artifactId>jwtp-spring-boot-starter</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2</version>
 </dependency>
 ```
 ### 2.2 加注解
@@ -31,22 +31,22 @@ jwtp.secret-key=123456
 jwtp.path=/**
 
 ## 排除拦截路径，默认无
-jwtp.exclude-path=/login,/swagger-resources/**
+jwtp.exclude-path=/swagger-resources/**,/v2/**
 
 ## 单个用户最大token数，默认-1不限制
 jwtp.max-token=10
 
 ## url自动对应权限方式，0 简易模式，1 RESTful模式，2 接口处根据注解校验
-jwtp.url-perm-type=0
+jwtp.url-perm-type=2
 
 ## 统一认证中心地址
 jwtp.auth-center-url=http://localhost:8082,http://localhost:8083
 
-## 自定义查询用户权限的sql
-jwtp.find-permissions-sql=SELECT authority FROM sys_user_authorities WHERE user_id = ?
+# 自定义查询用户权限的sql
+jwtp.find-permissions-sql=select permission_code from t_permission where id in (select permission_id from t_role_permission where role_id in (select role_id from t_user_role where user_id = ?))
 
-## 自定义查询用户角色的sql
-jwtp.find-roles-sql=SELECT role_id FROM sys_user_role WHERE user_id = ?
+# 自定义查询用户角色的sql
+jwtp.find-roles-sql=select role_code from t_role where id in (select role_id from t_user_role where user_id = ?)
 ```
 
 ### 2.4 登陆生成token
@@ -123,6 +123,7 @@ String userId = TokenUtil.parseToken(accessToken, tokenKey);
 4. 增加自定义密钥配置
 5. 统一认证地址可配置多个
 6. 代码注释等优化
+7. jwtp.url-perm-type=2 不自动校验url，只有接口添加鉴权注解才去校验
 
 说明：
 1. 在jwtp.store-type=2选择jwt方式，是不存储token的 所以jwtp.max-token是不限制的
@@ -163,4 +164,7 @@ String userId = TokenUtil.parseToken(accessToken, tokenKey);
 2021.01.29 1.5.1版本
 1. 加入jwtp.url-perm-type=2 不自动校验，只有接口添加鉴权注解才去校验
 2. 判断权限NPE处理
+
+2021.01.30 1.5.2版本
+1. Token实体时间格式化配置东八区
 ```

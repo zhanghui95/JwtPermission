@@ -7,7 +7,7 @@
     <groupId>com.yilers</groupId>
     <artifactId>jwt-permission-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.5.1</version>
+    <version>1.5.2</version>
 
 
     <name>JwtPermission</name>
@@ -44,7 +44,7 @@
     </modules>
 
     <properties>
-        <jwtp.version>1.5.1</jwtp.version>
+        <jwtp.version>1.5.2</jwtp.version>
         <jjwt.version>0.11.2</jjwt.version>
         <jackson.version>2.12.1</jackson.version>
         <redis.version>2.4.3</redis.version>
