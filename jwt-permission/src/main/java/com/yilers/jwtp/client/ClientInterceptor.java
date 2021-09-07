@@ -1,5 +1,8 @@
 package com.yilers.jwtp.client;
 
+import com.yilers.jwtp.auth.center.strategy.AuthCenterStrategy;
+import com.yilers.jwtp.auth.center.strategy.LoadBalanceStrategy;
+import com.yilers.jwtp.auth.center.strategy.RandomStrategy;
 import com.yilers.jwtp.exception.ErrorTokenException;
 import com.yilers.jwtp.exception.ExpiredTokenException;
 import com.yilers.jwtp.exception.UnauthorizedException;
@@ -14,7 +17,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.Random;
 
 /**
  * 拦截器
@@ -24,6 +26,15 @@ public class ClientInterceptor implements HandlerInterceptor {
     private UrlPerm urlPerm;
     private String authCenterUrl;
     private static final String COMMA = ",";
+    private Integer authCenterStrategyType;
+
+    public Integer getAuthCenterStrategyType() {
+        return authCenterStrategyType;
+    }
+
+    public void setAuthCenterStrategyType(Integer authCenterStrategy) {
+        this.authCenterStrategyType = authCenterStrategy;
+    }
 
     public ClientInterceptor() {
     }
@@ -32,9 +43,10 @@ public class ClientInterceptor implements HandlerInterceptor {
         setUrlPerm(urlPerm);
     }
 
-    public ClientInterceptor(String authCenterUrl, UrlPerm urlPerm) {
+    public ClientInterceptor(String authCenterUrl, UrlPerm urlPerm, Integer authCenterStrategy) {
         setAuthCenterUrl(authCenterUrl);
         setUrlPerm(urlPerm);
+        setAuthCenterStrategyType(authCenterStrategy);
     }
 
     public void setUrlPerm(UrlPerm urlPerm) {
@@ -76,13 +88,18 @@ public class ClientInterceptor implements HandlerInterceptor {
         if (authCenterUrl == null) {
             throw new RuntimeException("请配置authCenterUrl");
         }
-        // 多个地址 任意取一个
+        // 多个地址 再判断请求策略
         String centerUrl = authCenterUrl;
         if (authCenterUrl.contains(COMMA)) {
-            String[] split = authCenterUrl.split(COMMA);
-            Random random = new Random();
-            int round = random.nextInt(split.length);
-            centerUrl = split[round];
+            String[] urls = authCenterUrl.split(COMMA);
+            AuthCenterStrategy strategy = null;
+            if (0 == authCenterStrategyType) {
+                // 轮询
+                strategy = new LoadBalanceStrategy();
+            } else if (1 == authCenterStrategyType) {
+                strategy = new RandomStrategy();
+            }
+            centerUrl = strategy.getUrl(urls);
         }
         String url = centerUrl + "/authentication?access_token=" + access_token;
         AuthResult authResult = new RestTemplate().getForObject(url, AuthResult.class);

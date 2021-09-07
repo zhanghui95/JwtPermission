@@ -45,7 +45,7 @@ public class JwtPermissionProperties {
     private String findPermissionsSql;
 
     /**
-     * 统一认证中心地址，多个地址用逗号','分隔
+     * 统一认证中心地址，多个地址用逗号','分隔 可配置请求策略 随机/轮询
      */
     private String authCenterUrl;
 
@@ -53,6 +53,12 @@ public class JwtPermissionProperties {
      * 生成token的密钥，有则使用 无则自动生成
      */
     private String secretKey;
+
+    /**
+     * 0-轮询 1-随机
+     * 统一认证中心地址请求策略 默认轮询
+     */
+    private Integer authCenterStrategy = 0;
 
     public Integer getStoreType() {
         return storeType;
@@ -124,5 +130,13 @@ public class JwtPermissionProperties {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public Integer getAuthCenterStrategy() {
+        return authCenterStrategy;
+    }
+
+    public void setAuthCenterStrategy(Integer strategyType) {
+        this.authCenterStrategy = strategyType;
     }
 }

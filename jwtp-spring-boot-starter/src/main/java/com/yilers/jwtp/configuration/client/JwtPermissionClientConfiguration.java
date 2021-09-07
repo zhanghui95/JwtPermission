@@ -56,7 +56,7 @@ public class JwtPermissionClientConfiguration implements WebMvcConfigurer, Appli
         String[] path = properties.getPath();
         // 获取排除路径
         String[] excludePath = properties.getExcludePath();
-        ClientInterceptor interceptor = new ClientInterceptor(properties.getAuthCenterUrl(), urlPerm);
+        ClientInterceptor interceptor = new ClientInterceptor(properties.getAuthCenterUrl(), urlPerm, properties.getAuthCenterStrategy());
         registry.addInterceptor(interceptor).addPathPatterns(path).excludePathPatterns(excludePath);
     }
 
