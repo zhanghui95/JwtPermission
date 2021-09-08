@@ -13,7 +13,7 @@
 <dependency>
     <groupId>com.yilers</groupId>
     <artifactId>jwtp-spring-boot-starter</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3</version>
 </dependency>
 ```
 ### 2.2 加注解
@@ -41,6 +41,9 @@ jwtp.url-perm-type=2
 
 ## 统一认证中心地址
 jwtp.auth-center-url=http://localhost:8082,http://localhost:8083
+
+## 统一认证多个地址请求策略 1.5.3添加 0-轮询 1-随机
+jwtp.auth-center-strategy = 0
 
 # 自定义查询用户权限的sql
 jwtp.find-permissions-sql=select permission_code from t_permission where id in (select permission_id from t_role_permission where role_id in (select role_id from t_user_role where user_id = ?))
@@ -167,4 +170,7 @@ String userId = TokenUtil.parseToken(accessToken, tokenKey);
 
 2021.01.30 1.5.2版本
 1. Token实体时间格式化配置东八区
+
+2021.09.08 1.5.3版本
+1. 统一认证中心地址配置多个可配置请求策略(轮询/随机)
 ```
